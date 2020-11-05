@@ -1,26 +1,28 @@
 <template>
     <!-- lightning data service code -->
     <!-- <lightning-record-edit-form> using boatReviewObject -->
-      <lightning-layout multiple-rows vertical-align="start">
-        <lightning-layout-item size="8" padding="horizontal-small">
-          <div class="slds-form-element">
-             <!-- review subject field code using nameField -->
-          </div>
-        </lightning-layout-item>
-        <lightning-layout-item size="4" padding="horizontal-small">
-          <div class="slds-form-element">
-            <label class="slds-form-element__label" for="record-name">Rating</label>
-            <div class="slds-form-element__control">
-              <!-- add five star rating component -->
-            </div>
-          </div>
-        </lightning-layout-item>
-        <lightning-layout-item padding="horizontal-small">
-             <!-- review comment field code using commentField -->
-        </lightning-layout-item>
-      </lightning-layout>
-      <div class="slds-align_absolute-center" style="margin-top: 5px">
-             <!-- add submit button -->
-      </div>
+        <lightning-record-edit-form record-id={recordId} object-api-name="BoatReview__c" onsuccess={handleSuccess} onsubmit={handleSubmit}>
+            <lightning-layout vertical-align="stretch" multiple-rows="true">
+                <lightning-layout-item size="12" padding="around-small">
+                    <lightning-input label="Title:" onchange={handleTitleChange}></lightning-input>
+                </lightning-layout-item>
+                <lightning-layout-item size="12" padding="around-small">
+                    <lightning-input-field field-name="Name ">
+                    </lightning-input-field>
+                </lightning-layout-item>
+                <lightning-layout-item size="12" padding="around-small">
+                    <p>Rating:</p>
+                    <c-five-star-rating value={rating} read-only onratingchange={handleRatingChanged}></c-five-star-rating>
+                </lightning-layout-item>
+                <lightning-layout-item padding="horizontal-small">
+                    <lightning-input-field field-name="Comment__c ">
+                    </lightning-input-field>
+                </lightning-layout-item>
+                <div class="slds-align--absolute-center">
+                    <lightning-button label="Submit" type="submit" onclick={handleSubmit} icon-name="utility:save"></lightning-button>
+                    
+                </div>
+            </lightning-layout>
+        </lightning-record-edit-form>
     <!-- </lightning-record-edit-form> -->
   </template>
