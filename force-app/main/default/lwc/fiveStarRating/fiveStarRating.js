@@ -2,9 +2,13 @@
 import { LightningElement, api } from 'lwc';
 import fivestar from '@salesforce/resourceUrl/fivestar';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+import { loadStyle, loadScript } from 'lightning/platformResourceLoader';
 // add constants here
 const ERROR_TITLE = 'Error loading five-star';
 const ERROR_VARIANT = 'error';
+const EDITABLE_CLASS = 'c-rating';
+const READ_ONLY_CLASS = 'readonly c-rating';
+
 export default class FiveStarRating extends LightningElement {
   //initialize public readOnly and value properties
   @api readOnly;
@@ -14,7 +18,10 @@ export default class FiveStarRating extends LightningElement {
   isRendered;
 
   //getter function that returns the correct class depending on if it is readonly
-  starClass() {}
+  get 
+  starClass() {
+    return this.readOnly ? READ_ONLY_CLASS : EDITABLE_CLASS;
+  }
 
   // Render callback to load the script once the component renders.
   renderedCallback() {
@@ -35,7 +42,7 @@ export default class FiveStarRating extends LightningElement {
     ]).then(() => {
       this.initializeRating();
     }).catch(()=>{
-      const event = new ShowToastEvent({title:TOAST_ERROR_TITLE, variant:ERROR_VARIANT});
+      const event = new ShowToastEvent({title:ERROR_TITLE, variant:ERROR_VARIANT});
       this.dispatchEvent(event);
     });
 
@@ -60,5 +67,7 @@ export default class FiveStarRating extends LightningElement {
 
   // Method to fire event called ratingchange with the following parameter:
   // {detail: { rating: CURRENT_RATING }}); when the user selects a rating
-  ratingChanged(rating) {}
+  ratingChanged(rating) {
+    this.dispatchEvent(new CustomEvent('ratingchange', {detail: { rating: rating }}));
+  }
 }
