@@ -12,6 +12,7 @@ export default class BoatsNearMe extends LightningElement {
 @track isRendered = false;
 latitude;
 longitude;
+
 @wire(getBoatsByLocation, { latitude: "$latitude", longitude: "$longitude", boatTypeId: "$boatTypeId" })
 wiredBoatsJSON({ error, data }) {
 if (data) {
@@ -24,9 +25,11 @@ message: error.body.message,
 variant: ERROR_VARIANT
 })
 );
+
+}
 this.isLoading = false;
 }
-}
+
 createMapMarkers(boatData) {
 this.mapMarkers = boatData.map(rowBoat => {
 return {
@@ -53,6 +56,7 @@ this.getLocationFromBrowser();
 }
 this.isRendered = true;
 }
+
 getLocationFromBrowser() {
     navigator.geolocation.getCurrentPosition(
     (position) => {

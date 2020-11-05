@@ -1,11 +1,14 @@
 //import fivestar static resource, call it fivestar
-
+import { LightningElement, api } from 'lwc';
+import fivestar from '@salesforce/resourceUrl/fivestar';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 // add constants here
-
+const ERROR_TITLE = 'Error loading five-star';
+const ERROR_VARIANT = 'error';
 export default class FiveStarRating extends LightningElement {
   //initialize public readOnly and value properties
-  readOnly;
-  value;
+  @api readOnly;
+  @api value;
 
   editedValue;
   isRendered;
@@ -25,7 +28,18 @@ export default class FiveStarRating extends LightningElement {
   //Method to load the 3rd party script and initialize the rating.
   //call the initializeRating function after scripts are loaded
   //display a toast with error message if there is an error loading script
-  loadScript() {}
+  loadScript() {
+    Promise.all([
+      loadStyle(this, fivestar + '/rating.css'),
+      loadScript(this, fivestar + '/rating.js')
+    ]).then(() => {
+      this.initializeRating();
+    }).catch(()=>{
+      const event = new ShowToastEvent({title:TOAST_ERROR_TITLE, variant:ERROR_VARIANT});
+      this.dispatchEvent(event);
+    });
+
+  }
 
   initializeRating() {
     let domEl = this.template.querySelector('ul');
